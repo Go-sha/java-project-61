@@ -4,6 +4,7 @@
 package app;
 
 import org.junit.jupiter.api.Test;
+import hexlet.code.App;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
