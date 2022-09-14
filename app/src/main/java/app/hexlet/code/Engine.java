@@ -7,13 +7,33 @@ import java.lang.reflect.InvocationTargetException;
 class Engine {
     public static final int ATT = 3; /*< number of wrong attempts */
 
+    /* get methods without mark 'hide' from class Games */
     public static Method[] getGamesMethods() {
+        int retvalLength = 0;
         Games gamesObj = new Games();
         Class gamesClass = gamesObj.getClass();
+        Method[] methodsExtended = gamesClass.getDeclaredMethods();
+        Method[] methods = new Method[methodsExtended.length];
 
-        return gamesClass.getDeclaredMethods();
+        for (var method : methodsExtended) {
+            if (!method.getName().contains("hide")) {
+                methods[retvalLength] = method;
+                retvalLength++;
+            }
+        }
+        Method[] retval = new Method[retvalLength];
+
+        for (int i = 0; i < retval.length; i++) {
+            retval[i] = methods[i];
+        }
+
+        return retval;
     }
 
+    /* This method makes string array with names of the methods from
+     * getGamesMethods()(i.e. names of the games) and their IDs.
+     * It also adds Greet and Exit to that array.
+     */
     public static String[][] getGameList() {
         Method[] methods = Engine.getGamesMethods();
         String[][] games = new String[methods.length + 2][2];
@@ -85,6 +105,7 @@ class Engine {
         return gameName;
     }
 
+    /* call method with the game that user wanna play */
     public static void startGame(String gameName) {
         final String className = "hexlet.code.Games";
 
@@ -101,7 +122,7 @@ class Engine {
         Method[] methods = Engine.getGamesMethods();
 
         for (var method : methods) {
-            if (method.getName().equals(gameName.toLowerCase())) {
+            if (method.getName().toLowerCase().equals(gameName.toLowerCase())) {
                 try {
                     if((boolean) method.invoke(new Games(), userName)) {
                         System.out.println("Congratulations, " + userName + "!");
