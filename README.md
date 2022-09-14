@@ -4,4 +4,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/6e1e5290b57ed592411d/maintainability)](https://codeclimate.com/github/Go-sha/java-project-61/maintainability)
 
 
-step 5: https://asciinema.org/a/YxTs2pn6K8KdmEn7du7SXz1ns
+### Step 5:
+[![asciicast](https://asciinema.org/a/L7ElKDocvEqBB3fwTQtxWpKdz.svg)](https://asciinema.org/a/L7ElKDocvEqBB3fwTQtxWpKdz)
+
+### Step 6:
+[![asciicast](https://asciinema.org/a/I8gFpPMY1QXr5gA4vEstD6STq.svg)](https://asciinema.org/a/I8gFpPMY1QXr5gA4vEstD6STq)

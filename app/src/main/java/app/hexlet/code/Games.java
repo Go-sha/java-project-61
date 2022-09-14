@@ -1,99 +1,66 @@
 package hexlet.code;
 
-import java.util.Scanner;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
-
 class Games {
-    public static String chooseGame() {
-        final String[][] games = {
-            {"1", "Greet"},
-            {"2", "Even"},
-            {"0", "Exit"}
-        };
-        final var numberOfWrongAttempts = 3;
-        int numberOfAttempts = 0;
-        String gameId;
-        String className = null;
-        Scanner input = new Scanner(System.in);
+    public boolean even(String userName) {
+        final int randomRange = 100;
+        String correctAnswer;
 
-        System.out.println("Please enter the game number and press Enter.");
+        System.out.println("Answer 'yes' if number even "
+                           + "otherwise answer 'no'.");
 
-        for (var game : games) {
-            System.out.println(game[0] + " - " + game[1]);
-        }
+        for (int i = 0; i < Engine.ATT; i++) {
+            int random = (int) (Math.random() * randomRange);
 
-        while (className == null && numberOfAttempts < numberOfWrongAttempts) {
-            if (numberOfAttempts != 0) {
-                System.out.println("Wrong. Please enter correct number.");
+            System.out.println("Question: " + random);
+            correctAnswer = (random % 2) == 0 ? "yes" : "no";
+
+            if (!Engine.isCorrect(correctAnswer, userName)) {
+                return false;
             }
-            System.out.print("Your choice: ");
-            gameId = input.nextLine();
-
-            for (var game : games) {
-                if (game[0].equals(gameId)) {
-                    className = game[1];
-                    break;
-                }
-            }
-
-            numberOfAttempts++;
         }
-
-        if (className == null) {
-            System.out.println("Too many attempts to enter correct id of the game");
-        }
-        return className;
+        return true;
     }
 
-    public static void startGame(String gameName) {
-        Method method;
-        String className = "hexlet.code." + gameName;
-        String userName;
+    public boolean calc(String userName) {
+        final int opRange = 3;
+        final int randomRange = 20;
+        String opStr;
+        int correctAnswer;
 
-        if (gameName == "Exit") {
-            return;
-        }
+        System.out.println("What is the result of the expression?");
 
-        userName = Cli.greetings();
+        for (int i = 0; i < Engine.ATT; i++) {
+            int fRndm = (int) (Math.random() * randomRange);
+            int sRndm = (int) (Math.random() * randomRange);
+            int op = (int) (Math.random() * opRange);
 
-        if (gameName == "Greet") {
-            return;
-        }
+            switch (op) {
+                case 0:
+                    opStr = " + ";
+                    correctAnswer = fRndm + sRndm;
+                    break;
 
-        try {
-            Class<?> cls = Class.forName(className);
-            try {
-                Object clsObj = cls.newInstance();
-                try {
-                    Method m = cls.getMethod("startGame", String.class);
-                    try {
-                        m.invoke(clsObj, userName);
+                case 1:
+                    opStr = " - ";
+                    correctAnswer = fRndm - sRndm;
+                    break;
 
-                    /* handle exceptions for invoke() */
-                    } catch (IllegalAccessException e) {
-                        System.out.println(e.toString());
-                    } catch (IllegalArgumentException e) {
-                        System.out.println(e.toString());
-                    } catch (InvocationTargetException e) {
-                        System.out.println(e.toString());
-                    }
+                case 2:
+                    opStr = " * ";
+                    correctAnswer = fRndm * sRndm;
+                    break;
 
-                /* handle exceptions for getMethod() */
-                } catch (NoSuchMethodException e) {
-                    System.out.println(e.toString());
-                }
-
-            /* handle exceptions for newInstacne() */
-            } catch (InstantiationException e) {
-                System.out.println(e.toString());
-            } catch (IllegalAccessException e) {
-                System.out.println(e.toString());
+                default:
+                    System.out.println("wrong operator");
+                    return false;
             }
 
-        /* handle exceptions for forName() */
-        } catch (ClassNotFoundException e) {
-            System.out.println(e.toString());
+            System.out.println("Question: " + fRndm + opStr + sRndm);
+
+            if (!Engine.isCorrect(Integer.toString(correctAnswer), userName)) {
+                return false;
+            }
         }
+        return true;
     }
 }

@@ -5,9 +5,9 @@ public class App {
     public static void main(String[] args) {
         String gameName = null;
 
-        gameName = Games.chooseGame();
+        gameName = Engine.chooseGame();
         if (gameName != null) {
-            Games.startGame(gameName);
+            Engine.startGame(gameName);
         }
     }
 }
