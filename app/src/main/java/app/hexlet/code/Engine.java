@@ -7,7 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 class Engine {
     public static final int ATT = 3; /*< number of wrong attempts */
 
-    /* get methods without mark 'hide' from class Games */
+    /* This method find all methods from class Games that do not have
+     * hide in their names. */
     public static Method[] getGamesMethods() {
         int retvalLength = 0;
         Games gamesObj = new Games();
@@ -30,9 +31,9 @@ class Engine {
         return retval;
     }
 
-    /* This method makes string array with names of the methods from
-     * getGamesMethods()(i.e. names of the games) and their IDs.
-     * It also adds Greet and Exit to that array.
+    /* This method makes string array ordered by method ID
+     * with names of the methods from getGamesMethods()(i.e. names of the games)
+     * and their IDs. It also adds Greet and Exit to that array.
      */
     public static String[][] getGameList() {
         Method[] methods = Engine.getGamesMethods();
@@ -42,20 +43,19 @@ class Engine {
         games[0][0] = "1";
         games[0][1] = "Greet";
         for (var method : methods) {
-            var methodStr = method.getName();
-            games[i][0] = Integer.toString(i + 1);
-            games[i][1] = methodStr.substring(0, 1).toUpperCase()
-                          + methodStr.substring(1);
-            i++;
+            GamesAnno gAnno = method.getAnnotation(GamesAnno.class);
+            games[Integer.parseInt(gAnno.id()) - 1][0] = gAnno.id();
+            games[Integer.parseInt(gAnno.id()) - 1][1] = gAnno.name();
         }
-        games[i][0] = "0";
-        games[i][1] = "Exit";
+        games[games.length - 1][0] = "0";
+        games[games.length - 1][1] = "Exit";
 
         return games;
     }
+    /* This method checks that entered answer is correct or not. */
     public static boolean isCorrect(String correctAnswer, String userName) {
         Scanner input = new Scanner(System.in);
-        System.out.print("Your anser: ");
+        System.out.print("Your answer: ");
         var answer = input.nextLine();
 
         if (!answer.equals(correctAnswer)) {
@@ -70,6 +70,7 @@ class Engine {
         }
     }
 
+    /* This method chooses game according to id that was entered by the user. */
     public static String chooseGame() {
         final String[][] games = getGameList();
         int numberOfAttempts = 0;
@@ -105,7 +106,7 @@ class Engine {
         return gameName;
     }
 
-    /* call method with the game that user wanna play */
+    /* This method calls method with the game that the user wanna play */
     public static void startGame(String gameName) {
         final String className = "hexlet.code.Games";
 
@@ -122,9 +123,10 @@ class Engine {
         Method[] methods = Engine.getGamesMethods();
 
         for (var method : methods) {
-            if (method.getName().toLowerCase().equals(gameName.toLowerCase())) {
+            GamesAnno gAnno = method.getAnnotation(GamesAnno.class);
+            if (gAnno.name().equals(gameName)) {
                 try {
-                    if((boolean) method.invoke(new Games(), userName)) {
+                    if ((boolean) method.invoke(new Games(), userName)) {
                         System.out.println("Congratulations, " + userName + "!");
                     }
 

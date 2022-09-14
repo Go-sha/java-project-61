@@ -13,5 +13,8 @@
 ### Step 7:
 [![asciicast](https://asciinema.org/a/miQwIbMhNHhIYhw1jWddQdKrY.svg)](https://asciinema.org/a/miQwIbMhNHhIYhw1jWddQdKrY)
 
-## Step 8:
+### Step 8:
 [![asciicast](https://asciinema.org/a/jRm4qS9M7gYUrmdjEm5EjPtPY.svg)](https://asciinema.org/a/jRm4qS9M7gYUrmdjEm5EjPtPY)
+
+### Step 9:
+[![asciicast](https://asciinema.org/a/CRNLEV7CfVdi3fzDmI9pVyPlA.svg)](https://asciinema.org/a/CRNLEV7CfVdi3fzDmI9pVyPlA)
