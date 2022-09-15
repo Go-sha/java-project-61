@@ -78,7 +78,6 @@ class Engine {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Please enter the game number and press Enter.");
-
         for (var game : games) {
             System.out.println(game[0] + " - " + game[1]);
         }
@@ -115,7 +114,6 @@ class Engine {
         }
 
         String userName = Cli.greetings();
-
         if (gameName == "Greet") {
             return;
         }
