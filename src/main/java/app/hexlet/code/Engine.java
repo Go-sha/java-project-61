@@ -105,19 +105,7 @@ class Engine {
         return gameName;
     }
 
-    /* This method calls method with the game that the user wanna play */
-    public static void startGame(String gameName) {
-        final String className = "hexlet.code.Games";
-
-        if (gameName == "Exit") {
-            return;
-        }
-
-        String userName = Cli.greetings();
-        if (gameName == "Greet") {
-            return;
-        }
-
+    public static void startRealGame(String gameName, String userName) {
         Method[] methods = Engine.getGamesMethods();
 
         for (var method : methods) {
@@ -139,5 +127,20 @@ class Engine {
                 return;
             }
         }
+    }
+    /* This method calls method with the game that the user wanna play */
+    public static void startGame(String gameName) {
+        final String className = "hexlet.code.Games";
+
+        if (gameName == "Exit") {
+            return;
+        }
+
+        String userName = Cli.greetings();
+        if (gameName == "Greet") {
+            return;
+        }
+
+        Engine.startRealGame(gameName, userName);
     }
 }
