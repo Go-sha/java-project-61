@@ -6,52 +6,16 @@ import java.lang.reflect.InvocationTargetException;
 
 class Engine {
     public static final int ATT = 3; /*< number of wrong attempts */
+    public static final String[][] GAMES = {
+        {"1", "Greet"},
+        {"2", "Even"},
+        {"3", "Calc"},
+        {"4", "GCD"},
+        {"5", "Progression"},
+        {"6", "Prime"},
+        {"0", "Exit"}
+    };
 
-    /* This method find all methods from class Games that do not have
-     * hide in their names. */
-    public static Method[] getGamesMethods() {
-        int retvalLength = 0;
-        Games gamesObj = new Games();
-        Class gamesClass = gamesObj.getClass();
-        Method[] methodsExtended = gamesClass.getDeclaredMethods();
-        Method[] methods = new Method[methodsExtended.length];
-
-        for (var method : methodsExtended) {
-            if (!method.getName().contains("hide")) {
-                methods[retvalLength] = method;
-                retvalLength++;
-            }
-        }
-        Method[] retval = new Method[retvalLength];
-
-        for (int i = 0; i < retval.length; i++) {
-            retval[i] = methods[i];
-        }
-
-        return retval;
-    }
-
-    /* This method makes string array ordered by method ID
-     * with names of the methods from getGamesMethods()(i.e. names of the games)
-     * and their IDs. It also adds Greet and Exit to that array.
-     */
-    public static String[][] getGameList() {
-        Method[] methods = Engine.getGamesMethods();
-        String[][] games = new String[methods.length + 2][2];
-        int i = 1;
-
-        games[0][0] = "1";
-        games[0][1] = "Greet";
-        for (var method : methods) {
-            GamesAnno gAnno = method.getAnnotation(GamesAnno.class);
-            games[Integer.parseInt(gAnno.id()) - 1][0] = gAnno.id();
-            games[Integer.parseInt(gAnno.id()) - 1][1] = gAnno.name();
-        }
-        games[games.length - 1][0] = "0";
-        games[games.length - 1][1] = "Exit";
-
-        return games;
-    }
     /* This method checks that entered answer is correct or not. */
     public static boolean isCorrect(String correctAnswer, String userName) {
         Scanner input = new Scanner(System.in);
@@ -72,13 +36,12 @@ class Engine {
 
     /* This method chooses game according to id that was entered by the user. */
     public static String chooseGame() {
-        final String[][] games = getGameList();
         int numberOfAttempts = 0;
         String gameName = null;
         Scanner input = new Scanner(System.in);
 
         System.out.println("Please enter the game number and press Enter.");
-        for (var game : games) {
+        for (var game : Engine.GAMES) {
             System.out.println(game[0] + " - " + game[1]);
         }
 
@@ -89,7 +52,7 @@ class Engine {
             System.out.print("Your choice: ");
             String gameId = input.nextLine();
 
-            for (var game : games) {
+            for (var game : Engine.GAMES) {
                 if (game[0].equals(gameId)) {
                     gameName = game[1];
                     break;
@@ -105,32 +68,11 @@ class Engine {
         return gameName;
     }
 
-    public static void startRealGame(String gameName, String userName) {
-        Method[] methods = Engine.getGamesMethods();
-
-        for (var method : methods) {
-            GamesAnno gAnno = method.getAnnotation(GamesAnno.class);
-            if (gAnno.name().equals(gameName)) {
-                try {
-                    if ((boolean) method.invoke(new Games(), userName)) {
-                        System.out.println("Congratulations, " + userName + "!");
-                    }
-
-                /* handle exceptions for invoke() */
-                } catch (IllegalAccessException e) {
-                    System.out.println(e.toString());
-                } catch (IllegalArgumentException e) {
-                    System.out.println(e.toString());
-                } catch (InvocationTargetException e) {
-                    System.out.println(e.toString());
-                }
-                return;
-            }
-        }
-    }
-    /* This method calls method with the game that the user wanna play */
+    /* This method starts the game that the user want to play.
+     * It uses method startGame that every game class must have.
+     */
     public static void startGame(String gameName) {
-        final String className = "hexlet.code.Games";
+        final String className = "hexlet.code.games";
 
         if (gameName == "Exit") {
             return;
@@ -141,6 +83,30 @@ class Engine {
             return;
         }
 
-        Engine.startRealGame(gameName, userName);
+        gameName = gameName.substring(0, 1).toUpperCase()
+                   + gameName.substring(1).toLowerCase();
+
+        try {
+            Class cls = Class.forName("hexlet.code." + gameName);
+            Object obj = cls.newInstance();
+
+            Method startGame = cls.getMethod("startGame", String.class);
+            Object retValue = startGame.invoke(obj, userName);
+            if ((boolean) retValue) {
+                System.out.println("Congratulations, " + userName + "!");
+            }
+
+        } catch (ClassNotFoundException e) {
+            System.out.println(e.toString());
+        } catch (NoSuchMethodException e) {
+            System.out.println(e.toString());
+        } catch (InstantiationException e) {
+            System.out.println(e.toString());
+        } catch (IllegalAccessException e) {
+            System.out.println(e.toString());
+        } catch (InvocationTargetException e) {
+            System.out.println(e.toString());
+        }
+
     }
 }
