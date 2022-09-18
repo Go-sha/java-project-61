@@ -1,7 +1,7 @@
 package hexlet.code;
 
 class Prime {
-    public boolean startGames(String userName) {
+    public boolean startGame(String userName) {
         final int randomRange = 100;
 
         System.out.println("Answer 'yes' if given number is prime. "
@@ -12,10 +12,14 @@ class Prime {
             int number = (int) (Math.random() * randomRange);
             System.out.println("Question: " + number);
 
-            for (int j = 2; j < number; j++) {
-                if (number % j == 0) {
-                    correctAnswer = "no";
-                    break;
+            if (number == 0) {
+                correctAnswer = "no";
+            } else if (number != 1 || number != 2) {
+                for (int j = 2; j < number; j++) {
+                    if (number % j == 0) {
+                        correctAnswer = "no";
+                        break;
+                    }
                 }
             }
 

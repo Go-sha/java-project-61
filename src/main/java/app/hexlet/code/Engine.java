@@ -68,23 +68,7 @@ class Engine {
         return gameName;
     }
 
-    /* This method starts the game that the user want to play.
-     * It uses method startGame that every game class must have.
-     */
-    public static void startGame(String gameName) {
-        final String className = "hexlet.code.games";
-
-        if (gameName == "Exit") {
-            return;
-        }
-
-        String userName = Cli.greetings();
-        if (gameName == "Greet") {
-            return;
-        }
-
-        gameName = gameName.substring(0, 1).toUpperCase()
-                   + gameName.substring(1).toLowerCase();
+    public static void startRealGame(String gameName, String userName) {
 
         try {
             Class cls = Class.forName("hexlet.code." + gameName);
@@ -107,6 +91,26 @@ class Engine {
         } catch (InvocationTargetException e) {
             System.out.println(e.toString());
         }
+    }
 
+    /* This method starts the game that the user want to play.
+     * It uses method startGame that every game class must have.
+     */
+    public static void startGame(String gameName) {
+        final String className = "hexlet.code.games";
+
+        if (gameName == "Exit") {
+            return;
+        }
+
+        String userName = Cli.greetings();
+        if (gameName == "Greet") {
+            return;
+        }
+
+        gameName = gameName.substring(0, 1).toUpperCase()
+                   + gameName.substring(1).toLowerCase();
+
+        Engine.startRealGame(gameName, userName);
     }
 }
