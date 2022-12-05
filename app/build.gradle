@@ -33,7 +33,7 @@ dependencies {
 }
 
 compileJava {
-    options.release = 17;
+    options.release = 17
 }
 
 application {
